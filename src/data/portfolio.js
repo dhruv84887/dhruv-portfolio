@@ -323,32 +323,30 @@ export const projects = [
 
 /* ------------------------------------------------------------
  * CONTACT FORM
- * Set `endpoint` to a real service (Formspree, Formspark, your own
- * API route, …), e.g. endpoint: 'https://formspree.io/f/xxxxxxxx'
- * While `endpoint` is null, submissions are simulated (demo mode)
- * and nothing is sent anywhere. No credentials live in this repo.
+ * Delivery is handled by EmailJS (see src/config/emailjs.js).
+ * The service / template / public-key values are read from the
+ * Vite environment variables `VITE_EMAILJS_SERVICE_ID`,
+ * `VITE_EMAILJS_TEMPLATE_ID` and `VITE_EMAILJS_PUBLIC_KEY`
+ * (never hardcoded here), and the recipient is configured on the
+ * EmailJS template itself.
+ *
+ * Submitting ALWAYS calls @emailjs/browser `send()`. There is no
+ * simulated/demo path: the button reports success only when
+ * EmailJS has genuinely accepted the message.
  * ---------------------------------------------------------- */
 export const formConfig = {
-  endpoint: null, // ← editable: form service URL or null for demo mode
+  endpoint: 'emailjs', // ← the contact form is delivered via EmailJS
 }
 
+/**
+ * Send the contact form through EmailJS.
+ * @param {{name: string, email: string, subject: string, message: string}} data
+ * @returns {Promise<{ok: true}>} resolves only after EmailJS accepts it.
+ * @throws  {Error} with a short, credential-free message on failure.
+ */
 export async function submitContact(data) {
-  if (!formConfig.endpoint) {
-    await new Promise((resolve) => setTimeout(resolve, 1400))
-    return { ok: true, demo: true }
-  }
-
-  const response = await fetch(formConfig.endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-
-  if (!response.ok) throw new Error('Submission failed')
-  return { ok: true, demo: false }
+  const { sendContactEmail } = await import('../config/emailjs.js')
+  return sendContactEmail(data)
 }
 
 /* ------------------------------------------------------------

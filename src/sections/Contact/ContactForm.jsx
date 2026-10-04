@@ -27,6 +27,7 @@ function ContactForm() {
   const [values, setValues] = useState(initialValues)
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState('idle') // idle | sending | success | error
+  const [statusMessage, setStatusMessage] = useState('')
 
   const sending = status === 'sending'
 
@@ -52,12 +53,17 @@ function ContactForm() {
     }
 
     setStatus('sending')
+    setStatusMessage('')
     try {
       await submitContact(values)
       setValues(initialValues)
       setErrors({})
       setStatus('success')
-    } catch {
+    } catch (error) {
+      // `error.message` is a short, safe sentence (never a credential)
+      setStatusMessage(
+        error?.message || 'Something went wrong — please try again.',
+      )
       setStatus('error')
     }
   }
@@ -81,7 +87,7 @@ function ContactForm() {
             d="M22 37 l10 10 l19 -21"
           />
         </svg>
-        <h3 className={styles.successTitle}>Message Sent</h3>
+        <h3 className={styles.successTitle}>Message Sent Successfully</h3>
         <p className={styles.successText}>
           Thanks for reaching out — I&rsquo;ll get back to you soon.
         </p>
@@ -156,7 +162,7 @@ function ContactForm() {
 
       {status === 'error' && (
         <p className={styles.formError} role="alert">
-          Something went wrong — please try again.
+          {statusMessage || 'Something went wrong — please try again.'}
         </p>
       )}
 
