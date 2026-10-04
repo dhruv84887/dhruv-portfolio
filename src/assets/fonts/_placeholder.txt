@@ -1,0 +1,1 @@
+# Self-hosted font files (project currently loads Google Fonts via index.html).

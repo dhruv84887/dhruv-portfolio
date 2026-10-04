@@ -1,0 +1,11 @@
+/* Site entrance — crossfades with the preloader exit */
+.app {
+  animation: appEnter 600ms var(--ease-out-expo) both;
+}
+
+@keyframes appEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+}

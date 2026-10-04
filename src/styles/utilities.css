@@ -1,0 +1,171 @@
+/* =========================================================
+   UTILITIES — layout, glass, neon and typography helpers
+   available globally (also usable from CSS Modules).
+   ========================================================= */
+
+/* ---- Layout ---- */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+.section {
+  position: relative;
+  padding-block: clamp(4rem, 10vh, 8rem);
+}
+
+/* Soft light seam connecting sections */
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(900px, 85%);
+  height: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.07) 35%,
+    rgba(255, 255, 255, 0.07) 65%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* ---- Accessibility ---- */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: var(--z-overlay);
+  padding: 0.7rem 1.1rem;
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-sm);
+  background: var(--bg-panel);
+  backdrop-filter: blur(var(--glass-blur));
+  color: var(--accent-cyan);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--tracking-wide);
+  transform: translateY(-320%);
+  transition: transform var(--dur-fast) var(--ease-out-expo);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* (Unused .glass / .glass-panel / .neon-border / .hairline utilities
+   were removed in the performance pass — section-level glass styling
+   lives in each section's CSS module.) */
+
+/* ---- Typography helpers ---- */
+.text-gradient {
+  background: var(--gradient-accent);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--accent-cyan);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: 500;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  text-shadow: 0 0 18px rgba(77, 240, 255, 0.5);
+}
+
+/* ---- Buttons ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.72rem 1.4rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  letter-spacing: var(--tracking-wide);
+  transition:
+    transform var(--dur-fast) var(--ease-out-expo),
+    box-shadow var(--dur-base) var(--ease-out-expo),
+    border-color var(--dur-base) var(--ease-out-expo),
+    background var(--dur-base) var(--ease-out-expo);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-glow);
+  background: rgba(77, 240, 255, 0.06);
+  box-shadow: var(--glow-cyan);
+}
+
+.btn:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+.btn--primary {
+  background: var(--gradient-accent);
+  background-size: 160% 160%;
+  border-color: transparent;
+  color: #04121a;
+  font-weight: 600;
+}
+
+.btn--primary:hover {
+  box-shadow:
+    var(--glow-cyan),
+    var(--glow-violet);
+  background-position: 80% 50%;
+}
+
+/* ---- Button micro-interactions (premium hover) ---- */
+.btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Light sheen sweeping across on hover */
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    110deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.22) 45%,
+    transparent 65%
+  );
+  transform: translateX(-130%);
+  transition: transform 700ms var(--ease-out-expo);
+  pointer-events: none;
+}
+
+.btn:hover::after,
+.btn:focus-visible::after {
+  transform: translateX(130%);
+}
+
+.btn-arrow {
+  display: inline-block;
+  transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+.btn:hover .btn-arrow,
+.btn:focus-visible .btn-arrow {
+  transform: translateX(5px);
+}

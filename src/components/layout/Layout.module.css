@@ -1,0 +1,172 @@
+.layout {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+/* ---- Fixed backdrop layers ---- */
+.background {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-background);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Lightweight CSS starfield (replaces the WebGL backdrop canvas) */
+.starfield {
+  position: absolute;
+  inset: -60px;
+  background-image:
+    radial-gradient(
+      1.5px 1.5px at 34px 52px,
+      rgba(233, 237, 251, 0.65),
+      transparent 100%
+    ),
+    radial-gradient(
+      1px 1px at 156px 96px,
+      rgba(157, 220, 255, 0.55),
+      transparent 100%
+    ),
+    radial-gradient(
+      1.3px 1.3px at 84px 188px,
+      rgba(198, 180, 255, 0.5),
+      transparent 100%
+    ),
+    radial-gradient(
+      1px 1px at 214px 148px,
+      rgba(233, 237, 251, 0.45),
+      transparent 100%
+    );
+  background-size: 280px 280px, 340px 340px, 420px 420px, 520px 520px;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Occasional subtle light streaks */
+.background::before,
+.background::after {
+  content: '';
+  position: absolute;
+  top: 26%;
+  left: 0;
+  width: 32vw;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(170, 226, 255, 0.4),
+    transparent
+  );
+  opacity: 0;
+  animation: streakPass 17s linear infinite;
+}
+
+.background::after {
+  top: 64%;
+  width: 24vw;
+  animation-delay: 9s;
+  animation-duration: 21s;
+}
+
+@keyframes streakPass {
+  0% {
+    opacity: 0;
+    transform: translateX(-40vw) rotate(-16deg);
+  }
+  8% {
+    opacity: 0.55;
+  }
+  52% {
+    opacity: 0.55;
+  }
+  62%,
+  100% {
+    opacity: 0;
+    transform: translateX(150vw) rotate(-16deg);
+  }
+}
+
+/* Streaks are a desktop enhancement only */
+@media (max-width: 640px) {
+  .background::before,
+  .background::after {
+    display: none;
+  }
+}
+
+.aurora {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(
+      45% 40% at 75% 20%,
+      rgba(139, 92, 246, 0.22),
+      transparent 70%
+    ),
+    radial-gradient(
+      40% 35% at 15% 70%,
+      rgba(77, 240, 255, 0.16),
+      transparent 70%
+    ),
+    radial-gradient(
+      30% 30% at 55% 90%,
+      rgba(255, 94, 168, 0.1),
+      transparent 70%
+    );
+  filter: blur(40px);
+}
+
+/* Perspective grid fading toward the horizon */
+.gridOverlay {
+  position: absolute;
+  inset: -80px;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(
+    ellipse 90% 75% at 50% 40%,
+    black 25%,
+    transparent 78%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 90% 75% at 50% 40%,
+    black 25%,
+    transparent 78%
+  );
+  animation: bgGridDrift 70s linear infinite;
+  will-change: transform;
+}
+
+/* Extremely subtle grid drift (seamless72px tile) */
+@keyframes bgGridDrift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-72px, -72px, 0);
+  }
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 120% 90% at 50% 0%,
+    transparent 45%,
+    rgba(2, 3, 8, 0.85) 100%
+  );
+}
+
+/* ---- Content ---- */
+.main {
+  position: relative;
+  z-index: var(--z-content);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding-top: var(--nav-height);
+}

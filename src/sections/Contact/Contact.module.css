@@ -1,0 +1,577 @@
+/* =========================================================
+   CONTACT — futuristic contact section (#contact)
+   ========================================================= */
+
+.contact {
+  position: relative;
+  background-image: radial-gradient(
+    55% 40% at 50% 0%,
+    rgba(77, 240, 255, 0.07),
+    transparent 70%
+  );
+}
+
+/* Slow-drifting background grid */
+.gridLayer {
+  position: absolute;
+  inset: -90px;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(
+    ellipse 75% 65% at 50% 45%,
+    black 25%,
+    transparent 78%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 75% 65% at 50% 45%,
+    black 25%,
+    transparent 78%
+  );
+  animation: contactGridDrift 42s linear infinite;
+  will-change: transform;
+  pointer-events: none;
+}
+
+@keyframes contactGridDrift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-72px, -72px, 0);
+  }
+}
+
+/* Gradient lighting */
+.lighting {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(
+      45% 40% at 78% 22%,
+      rgba(139, 92, 246, 0.1),
+      transparent 70%
+    ),
+    radial-gradient(
+      40% 35% at 14% 72%,
+      rgba(77, 240, 255, 0.08),
+      transparent 70%
+    );
+  pointer-events: none;
+}
+
+/* Cursor-following spotlight */
+.spotlight {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(
+    420px circle at var(--sx, 50%) var(--sy, 50%),
+    rgba(77, 240, 255, 0.07),
+    rgba(139, 92, 246, 0.035) 45%,
+    transparent 70%
+  );
+  opacity: var(--spot, 0);
+  transition: opacity 500ms var(--ease-smooth);
+  pointer-events: none;
+}
+
+/* ---- Header ---- */
+.header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.heading {
+  font-size: var(--fs-h2);
+  letter-spacing: -0.03em;
+}
+
+.subtitle {
+  max-width: 52ch;
+  color: var(--text-secondary);
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  line-height: 1.7;
+}
+
+/* ---- Two-column layout ---- */
+.grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  margin-top: clamp(2.5rem, 6vh, 4rem);
+  align-items: start;
+}
+
+.visualCol,
+.formCol {
+  min-width: 0;
+}
+
+@media (min-width: 820px) {
+  .grid {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+  }
+}
+
+/* ---- Left: 3D communication visual ---- */
+.visual {
+  position: relative;
+  height: clamp(320px, 72vw, 420px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.05),
+      rgba(255, 255, 255, 0.015) 45%,
+      rgba(255, 255, 255, 0.04)
+    ),
+    rgba(6, 9, 18, 0.78);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(77, 240, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.visualGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 35% 40%,
+      rgba(77, 240, 255, 0.24),
+      transparent 58%
+    ),
+    radial-gradient(
+      circle at 65% 60%,
+      rgba(139, 92, 246, 0.26),
+      transparent 58%
+    );
+  filter: blur(46px);
+  transform: translate(-50%, -50%);
+  animation: contactGlowBreath 7s var(--ease-smooth) infinite alternate;
+}
+
+@keyframes contactGlowBreath {
+  0% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.canvasWrap {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---- Contact links ---- */
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  letter-spacing: var(--tracking-wide);
+  transition:
+    transform var(--dur-base) var(--ease-out-expo),
+    border-color var(--dur-base) var(--ease-smooth),
+    box-shadow var(--dur-base) var(--ease-smooth),
+    color var(--dur-base) var(--ease-smooth);
+}
+
+.link:hover,
+.link:focus-visible {
+  transform: translateY(-3px);
+  border-color: rgba(77, 240, 255, 0.45);
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.4),
+    0 0 22px rgba(77, 240, 255, 0.18);
+  color: var(--text-primary);
+}
+
+.linkGlyph {
+  display: grid;
+  place-items: center;
+  min-width: 26px;
+  height: 26px;
+  padding-inline: 4px;
+  border: 1px solid rgba(77, 240, 255, 0.4);
+  border-radius: 7px;
+  background: linear-gradient(
+    140deg,
+    rgba(77, 240, 255, 0.16),
+    rgba(139, 92, 246, 0.16)
+  );
+  color: var(--accent-cyan);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-shadow: 0 0 10px rgba(77, 240, 255, 0.6);
+}
+
+.linkArrow {
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+.link:hover .linkArrow {
+  transform: translate(2px, -2px);
+  color: var(--accent-cyan);
+}
+
+/* ---- Right: glass contact panel (soft animated border) ---- */
+.formPanel {
+  position: relative;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(155deg, rgba(14, 18, 34, 0.93), rgba(7, 9, 18, 0.88))
+      padding-box,
+    linear-gradient(
+        135deg,
+        rgba(77, 240, 255, 0.55),
+        rgba(139, 92, 246, 0.4) 40%,
+        rgba(255, 255, 255, 0.1) 70%,
+        rgba(77, 240, 255, 0.35)
+      )
+      border-box;
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.5),
+    0 0 48px rgba(77, 240, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+/* (backdrop-filter and the animated gradient border were removed:
+   both forced repaints on every scroll frame.) */
+
+/* ---- Form ---- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.field {
+  position: relative;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  min-height: 58px;
+  padding: 1.65rem 1.15rem 0.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  letter-spacing: var(--tracking-wide);
+  transition:
+    border-color var(--dur-base) var(--ease-smooth),
+    box-shadow var(--dur-base) var(--ease-smooth),
+    background var(--dur-base) var(--ease-smooth);
+}
+
+.input::placeholder {
+  color: transparent;
+}
+
+.input:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.input:focus {
+  outline: none;
+  border-color: rgba(77, 240, 255, 0.6);
+  background: rgba(77, 240, 255, 0.05);
+  box-shadow:
+    0 0 0 3px rgba(77, 240, 255, 0.12),
+    0 0 28px rgba(77, 240, 255, 0.16),
+    inset 0 0 24px rgba(77, 240, 255, 0.05);
+}
+
+.input[aria-invalid='true'] {
+  border-color: rgba(255, 94, 168, 0.6);
+}
+
+.input[aria-invalid='true']:focus {
+  box-shadow:
+    0 0 0 3px rgba(255, 94, 168, 0.14),
+    0 0 28px rgba(255, 94, 168, 0.16);
+}
+
+/* Smooth floating label */
+.label {
+  position: absolute;
+  left: 1.15rem;
+  top: 50%;
+  transform: translateY(-50%);
+  transform-origin: left center;
+  color: var(--text-muted);
+  font-size: 1rem;
+  pointer-events: none;
+  transition:
+    top var(--dur-base) var(--ease-out-expo),
+    transform var(--dur-base) var(--ease-out-expo),
+    color var(--dur-base) var(--ease-smooth);
+}
+
+.input:focus ~ .label,
+.input:not(:placeholder-shown) ~ .label {
+  top: 0.7rem;
+  transform: translateY(0) scale(0.75);
+  color: var(--accent-cyan);
+  text-shadow: 0 0 12px rgba(77, 240, 255, 0.5);
+}
+
+.textarea {
+  min-height: 150px;
+  padding-top: 1.9rem;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.textarea ~ .label {
+  top: 1.15rem;
+  transform: none;
+}
+
+.textarea:focus ~ .label,
+.textarea:not(:placeholder-shown) ~ .label {
+  top: 0.55rem;
+  transform: scale(0.75);
+}
+
+.error {
+  margin-top: 0.45rem;
+  padding-left: 0.25rem;
+  color: #ff7ab8;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  animation: errorIn 260ms var(--ease-out-expo) both;
+}
+
+@keyframes errorIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.formError {
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 94, 168, 0.4);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 94, 168, 0.08);
+  color: #ff9ecb;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+/* ---- Submit button ---- */
+.submit {
+  align-self: flex-start;
+  min-height: 52px;
+  margin-top: var(--space-2);
+  padding-inline: 1.9rem;
+}
+
+.submit:disabled {
+  opacity: 0.75;
+  cursor: wait;
+  transform: none;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(4, 18, 26, 0.3);
+  border-top-color: #04121a;
+  border-radius: 50%;
+  animation: contactSpin 700ms linear infinite;
+}
+
+@keyframes contactSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---- Polished success state ---- */
+.success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: clamp(1.5rem, 4vh, 2.5rem) 0;
+  text-align: center;
+  animation: successIn 560ms var(--ease-out-expo) both;
+}
+
+@keyframes successIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+.successIcon {
+  width: 84px;
+  height: 84px;
+  overflow: visible;
+  animation: iconPop 640ms var(--ease-out-expo) both;
+}
+
+@keyframes iconPop {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+.successCircle {
+  fill: none;
+  stroke: var(--accent-cyan);
+  stroke-width: 3;
+  stroke-dasharray: 201;
+  stroke-dashoffset: 201;
+  filter: drop-shadow(0 0 12px rgba(77, 240, 255, 0.7));
+  animation: contactDraw 700ms var(--ease-out-expo) 150ms forwards;
+}
+
+.successCheck {
+  fill: none;
+  stroke: #eafcff;
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  filter: drop-shadow(0 0 10px rgba(77, 240, 255, 0.8));
+  animation: contactDraw 520ms ease-out 560ms forwards;
+}
+
+@keyframes contactDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.successTitle {
+  font-size: clamp(1.3rem, 2vw, 1.6rem);
+}
+
+.successText {
+  max-width: 40ch;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ---- Floating particles ---- */
+.particles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(77, 240, 255, 0.8);
+  opacity: 0.45;
+  animation: contactParticleFloat var(--pdur, 13s) ease-in-out infinite;
+  animation-delay: var(--pdelay, 0s);
+  will-change: transform;
+}
+
+.particleViolet {
+  background: var(--accent-violet);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.8);
+}
+
+@keyframes contactParticleFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate3d(12px, -22px, 0);
+    opacity: 0.6;
+  }
+}
+
+/* ---- Responsive ---- */
+
+/* Two-column: tablet keeps a reduced 3D visual */
+@media (min-width: 820px) {
+  .visual {
+    height: clamp(380px, 46vh, 460px);
+  }
+}
+
+/* Desktop: full-size visual */
+@media (min-width: 1024px) {
+  .visual {
+    height: clamp(440px, 54vh, 540px);
+  }
+}
+
+/* Mobile: stacked, touch-friendly, fewer particles */
+@media (max-width: 639px) {
+  .submit {
+    align-self: stretch;
+    width: 100%;
+    min-height: 54px;
+  }
+
+  .links {
+    justify-content: center;
+  }
+
+  .input {
+    font-size: 16px;
+  }
+
+  .particles {
+    display: none;
+  }
+}
+
+/* (backdrop-filter removed from the form panel — it re-blurred
+   the page on every scroll frame.) */

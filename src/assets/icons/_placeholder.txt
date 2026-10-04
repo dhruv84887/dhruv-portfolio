@@ -1,0 +1,1 @@
+# SVG icon assets (prefer inline React icon components when possible).

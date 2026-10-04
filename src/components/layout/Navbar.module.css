@@ -1,0 +1,350 @@
+/* =========================================================
+   NAVBAR — floating glass pill + full-screen mobile menu
+   ========================================================= */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-nav);
+  padding: 12px var(--container-pad) 0;
+  pointer-events: none; /* transparent area lets clicks through */
+}
+
+/* Floating pill */
+.bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(1rem, 2vw, 1.75rem);
+  height: 60px;
+  max-width: 1140px;
+  margin-inline: auto;
+  padding: 0 clamp(0.75rem, 1.6vw, 1.25rem);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-full);
+  background: rgba(5, 7, 14, 0.88);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  pointer-events: auto;
+  transition:
+    height var(--dur-base) var(--ease-out-expo),
+    background var(--dur-base) var(--ease-smooth),
+    border-color var(--dur-base) var(--ease-smooth),
+    box-shadow var(--dur-base) var(--ease-smooth);
+}
+
+/* Subtle top-edge highlight inside the pill */
+.bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.28),
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Stronger appearance after scrolling */
+.scrolled .bar {
+  height: 56px;
+  background: rgba(4, 5, 11, 0.94);
+  border-color: rgba(77, 240, 255, 0.18);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.5),
+    0 0 24px rgba(77, 240, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* ---- Brand: glowing "DH" mark ---- */
+.brand {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(77, 240, 255, 0.5);
+  border-radius: 12px;
+  background: linear-gradient(
+    140deg,
+    rgba(77, 240, 255, 0.18),
+    rgba(139, 92, 246, 0.18)
+  );
+  color: var(--accent-cyan);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 14px rgba(77, 240, 255, 0.8);
+  box-shadow:
+    0 0 16px rgba(77, 240, 255, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* ---- Desktop navigation (perfectly centered) ---- */
+.desktopNav {
+  display: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.link {
+  position: relative;
+  padding: 0.45rem 0.1rem;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: var(--tracking-wide);
+  transition: color var(--dur-fast) var(--ease-smooth);
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--gradient-accent);
+  box-shadow: 0 0 10px rgba(77, 240, 255, 0.7);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-base) var(--ease-out-expo);
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--text-primary);
+}
+
+.link:hover::after,
+.link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* Active section indicator */
+.linkActive,
+.linkActive:hover {
+  color: var(--accent-cyan);
+  text-shadow: 0 0 14px rgba(77, 240, 255, 0.5);
+}
+
+.linkActive::after {
+  transform: scaleX(1);
+}
+
+.cta {
+  display: none;
+  flex-shrink: 0;
+}
+
+/* ---- Hamburger (morphs to X) ---- */
+.toggle {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  transition:
+    border-color var(--dur-fast) var(--ease-smooth),
+    box-shadow var(--dur-fast) var(--ease-smooth);
+}
+
+.toggle:hover {
+  border-color: var(--border-glow);
+  box-shadow: var(--glow-cyan);
+}
+
+.toggleBars {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.toggleBars > span {
+  width: 20px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--text-primary);
+  transition:
+    transform var(--dur-base) var(--ease-out-expo),
+    opacity var(--dur-fast) var(--ease-smooth),
+    background var(--dur-fast) var(--ease-smooth);
+}
+
+.toggle:hover .toggleBars > span {
+  background: var(--accent-cyan);
+}
+
+.toggle[aria-expanded='true'] .bar1 {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.toggle[aria-expanded='true'] .bar2 {
+  opacity: 0;
+}
+
+.toggle[aria-expanded='true'] .bar3 {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ---- Full-screen glass mobile menu ---- */
+.mobile {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2rem, 6vh, 3rem);
+  padding: calc(var(--nav-height) + 1.5rem) var(--container-pad)
+    var(--space-8);
+  overflow-y: auto;
+  background:
+    radial-gradient(
+      60% 40% at 70% 18%,
+      rgba(139, 92, 246, 0.18),
+      transparent 70%
+    ),
+    radial-gradient(
+      50% 40% at 20% 82%,
+      rgba(77, 240, 255, 0.14),
+      transparent 70%
+    ),
+    rgba(3, 4, 10, 0.97);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: auto;
+  transition:
+    opacity var(--dur-base) var(--ease-smooth),
+    visibility 0s linear var(--dur-base);
+}
+
+.mobileOpen {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity var(--dur-base) var(--ease-smooth),
+    visibility 0s;
+}
+
+.mobileNav {
+  display: flex;
+  flex-direction: column;
+  width: min(440px, 100%);
+}
+
+.mobileLink {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 7vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-secondary);
+  transition:
+    color var(--dur-fast) var(--ease-smooth),
+    padding-left var(--dur-base) var(--ease-out-expo);
+}
+
+/* Staggered entrance on open */
+.mobileOpen .mobileLink {
+  animation: menuItemIn 550ms var(--ease-out-expo) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 140ms);
+}
+
+@keyframes menuItemIn {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+}
+
+.mobileLink:hover,
+.mobileLink:focus-visible {
+  color: var(--text-primary);
+  padding-left: 0.5rem;
+}
+
+.mobileLinkActive,
+.mobileLinkActive:hover {
+  color: var(--accent-cyan);
+  text-shadow: 0 0 18px rgba(77, 240, 255, 0.45);
+}
+
+.mobileIndex {
+  color: var(--accent-cyan);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 12px rgba(77, 240, 255, 0.6);
+}
+
+.mobileActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  width: min(440px, 100%);
+  text-align: center;
+}
+
+.mobileOpen .mobileActions {
+  animation: menuItemIn 550ms var(--ease-out-expo) both;
+  animation-delay: calc(6 * 70ms + 140ms);
+}
+
+.mobileNote {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* ---- Desktop breakpoint: real links, no overlay ---- */
+@media (min-width: 1024px) {
+  .desktopNav {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.1rem, 2vw, 1.9rem);
+  }
+
+  .cta {
+    display: inline-flex;
+  }
+
+  .toggle {
+    display: none;
+  }
+
+  .mobile {
+    display: none;
+  }
+}
+
+/* (backdrop-filter removed from the navbar entirely — it caused
+   re-blur work on every scroll frame.) */

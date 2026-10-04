@@ -1,0 +1,2 @@
+# Shared presentational components (buttons, cards, badges, modals, …).
+# Colocate component JSX + CSS Module, e.g. GlassCard.jsx / GlassCard.module.css.

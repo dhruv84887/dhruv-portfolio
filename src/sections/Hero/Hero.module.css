@@ -1,0 +1,424 @@
+/* =========================================================
+   HERO — full-screen cinematic intro (#home)
+   ========================================================= */
+
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - var(--nav-height));
+  min-height: calc(100svh - var(--nav-height));
+  padding-block: clamp(2.5rem, 6vh, 4.5rem) clamp(5.5rem, 11vh, 7rem);
+  overflow: hidden;
+}
+
+/* Subtle cinematic spotlight behind the hero */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      48% 46% at 62% 40%,
+      rgba(77, 240, 255, 0.1),
+      transparent 70%
+    ),
+    radial-gradient(
+      40% 42% at 22% 78%,
+      rgba(139, 92, 246, 0.09),
+      transparent 70%
+    );
+  pointer-events: none;
+}
+
+.inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  align-items: center;
+  gap: clamp(2.75rem, 6vw, 4.5rem);
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  min-width: 0; /* grid children must be allowed to shrink */
+}
+
+/* ---- Badge ---- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: 100%;
+  padding: 0.5rem 1.05rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: clamp(0.6875rem, 1.3vw, 0.75rem);
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.badgeText {
+  min-width: 0;
+  text-align: center;
+}
+
+.badgeDot {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(77, 240, 255, 0.9);
+  animation: dotPulse 2.6s var(--ease-smooth) infinite;
+}
+
+@keyframes dotPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.8);
+  }
+}
+
+/* ---- Second line (word-staggered reveal) ---- */
+.subline {
+  margin-top: clamp(1rem, 2.4vh, 1.5rem);
+  font-size: clamp(1.125rem, 2.3vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: var(--tracking-tight);
+}
+
+.sublineWord {
+  display: inline-block; /* inline boxes ignore transforms; inline-block reveals */
+}
+
+/* "Code & AI." — one-time gradient sweep, no perpetual animation cost */
+.sublineAccent {
+  background: var(--gradient-accent);
+  background-size: 180% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: sublineSweep 2.4s var(--ease-out-expo) 0.5s both;
+}
+
+@keyframes sublineSweep {
+  from {
+    background-position: 130% 50%;
+  }
+  to {
+    background-position: 0% 50%;
+  }
+}
+
+/* ---- Headline ---- */
+.title {
+  margin-top: clamp(1.25rem, 3vh, 1.75rem);
+  font-size: var(--fs-display);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  text-shadow: 0 0 48px rgba(77, 240, 255, 0.12);
+}
+
+/* One-time cinematic gradient sweep on the name (no perpetual cost) */
+.title :global(.text-gradient) {
+  background-size: 220% 100%;
+  animation: titleSweep 3.2s var(--ease-out-expo) 0.35s both;
+}
+
+@keyframes titleSweep {
+  from {
+    background-position: 130% 50%;
+  }
+  to {
+    background-position: 0% 50%;
+  }
+}
+
+.lede {
+  margin-top: var(--space-5);
+  max-width: 46ch;
+  color: var(--text-secondary);
+  font-size: clamp(1rem, 1.5vw, 1.1875rem);
+  line-height: 1.7;
+}
+
+/* ---- Actions ---- */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+}
+
+.actions > :global(.btn) {
+  padding: 0.9rem 1.85rem;
+  font-size: 1rem;
+}
+
+/* ---- Availability status ---- */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: var(--space-6);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: clamp(0.6875rem, 1.3vw, 0.78125rem);
+  letter-spacing: 0.08em;
+}
+
+.statusDot {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #57e389;
+  box-shadow: 0 0 10px rgba(87, 227, 137, 0.75);
+  animation: statusPulse 2.4s var(--ease-smooth) infinite;
+}
+
+/* Opacity/scale only — compositor-friendly pulse */
+@keyframes statusPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+}
+
+/* ---- Resume CTA while profile.resumeUrl is still a placeholder ---- */
+:global(.btn).resumeSoon {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+:global(.btn).resumeSoon:hover {
+  transform: none;
+  border-color: var(--glass-border);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: none;
+}
+
+:global(.btn).resumeSoon::after {
+  display: none; /* no sheen on a disabled CTA */
+}
+
+.soonChip {
+  padding: 0.12rem 0.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ---- 3D visual ---- */
+.visual {
+  position: relative;
+  min-width: 0;
+  height: clamp(320px, 45vw, 560px);
+}
+
+/* Animated neon glow behind the 3D object */
+.glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 125%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 32% 36%,
+      rgba(77, 240, 255, 0.3),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 67% 62%,
+      rgba(139, 92, 246, 0.32),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(255, 94, 168, 0.1),
+      transparent 62%
+    );
+  filter: blur(48px);
+  transform: translate(-50%, -50%);
+  animation: glowOrbit 6s ease-in-out infinite alternate;
+}
+
+/* Opacity-only pulse: never re-rasterize the blurred layer */
+@keyframes glowOrbit {
+  0% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.canvasWrap {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---- Scroll indicator ---- */
+.scroll {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1rem, 2.5vh, 1.75rem);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  transform: translateX(-50%);
+  color: var(--text-muted);
+  animation: scrollBob 2.6s var(--ease-smooth) infinite;
+  transition: color var(--dur-fast) var(--ease-smooth);
+}
+
+@keyframes scrollBob {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-6px);
+  }
+}
+
+.scroll:hover,
+.scroll:focus-visible {
+  color: var(--accent-cyan);
+}
+
+.scrollLabel {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.32em;
+  text-indent: 0.32em;
+  text-transform: uppercase;
+}
+
+.scrollTrack {
+  display: flex;
+  justify-content: center;
+  width: 22px;
+  height: 36px;
+  padding-top: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: var(--radius-full);
+  transition: border-color var(--dur-fast) var(--ease-smooth);
+}
+
+.scroll:hover .scrollTrack {
+  border-color: rgba(77, 240, 255, 0.5);
+}
+
+.scrollDot {
+  width: 3px;
+  height: 7px;
+  border-radius: var(--radius-full);
+  background: currentColor;
+  box-shadow: 0 0 10px currentColor;
+  animation: scrollDot 2.1s var(--ease-smooth) infinite;
+}
+
+@keyframes scrollDot {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  70%,
+  100% {
+    transform: translateY(13px);
+    opacity: 0;
+  }
+}
+
+/* ---- Responsive composition ---- */
+
+/* Mobile: text first, visual below, centered */
+@media (max-width: 767px) {
+  .content {
+    text-align: center;
+  }
+
+  .actions {
+    justify-content: center;
+  }
+
+  .lede {
+    margin-inline: auto;
+  }
+
+  /* Borderless micro-label so the long focus line never crowds a phone */
+  .badge {
+    padding-inline: 0;
+    border-color: transparent;
+    background: transparent;
+    font-size: 0.625rem;
+    letter-spacing: 0.06em;
+  }
+
+  .glow {
+    width: 150%;
+  }
+}
+
+/* Phones: full-width stacked tap targets */
+@media (max-width: 430px) {
+  .actions > :global(.btn) {
+    flex: 1 1 100%;
+  }
+}
+
+/* Tablet: balanced two-column composition */
+@media (min-width: 768px) {
+  .inner {
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+    gap: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  .visual {
+    height: clamp(340px, 42vw, 480px);
+  }
+}
+
+/* Desktop: strong cinematic split — text left, 3D on the right */
+@media (min-width: 1024px) {
+  .inner {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+  }
+
+  .visual {
+    height: min(64vh, 600px);
+  }
+}

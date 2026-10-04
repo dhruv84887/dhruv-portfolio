@@ -1,0 +1,120 @@
+/* =========================================================
+   DESIGN TOKENS — the single source of truth for the
+   futuristic visual system (colors, type, spacing, motion).
+   ========================================================= */
+
+:root {
+  color-scheme: dark;
+
+  /* ---- Deep-space palette ---- */
+  --bg-void: #03040a;
+  --bg-deep: #05060d;
+  --bg-elevated: #0a0d18;
+  --bg-panel: rgba(10, 13, 24, 0.6);
+
+  /* ---- Glassmorphism ---- */
+  --glass-tint: rgba(8, 11, 22, 0.55);
+  --glass-highlight: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: 18px;
+  --glass-saturate: 160%;
+
+  /* ---- Neon accents ---- */
+  --accent-cyan: #4df0ff;
+  --accent-violet: #8b5cf6;
+  --accent-pink: #ff5ea8;
+  --accent-cyan-soft: rgba(77, 240, 255, 0.14);
+  --accent-violet-soft: rgba(139, 92, 246, 0.16);
+  --border-glow: rgba(77, 240, 255, 0.25);
+
+  /* ---- Text ---- */
+  --text-primary: #e9edfb;
+  --text-secondary: #a3aecb;
+  --text-muted: #7d88aa;
+
+  /* ---- Gradients ---- */
+  --gradient-accent: linear-gradient(
+    120deg,
+    var(--accent-cyan) 0%,
+    var(--accent-violet) 55%,
+    var(--accent-pink) 100%
+  );
+  --gradient-border: linear-gradient(
+    135deg,
+    rgba(77, 240, 255, 0.55),
+    rgba(139, 92, 246, 0.35) 45%,
+    rgba(255, 255, 255, 0.08) 85%
+  );
+
+  /* ---- Glows ---- */
+  --glow-cyan: 0 0 24px rgba(77, 240, 255, 0.35);
+  --glow-violet: 0 0 24px rgba(139, 92, 246, 0.35);
+  --glow-soft: 0 0 48px rgba(77, 240, 255, 0.1);
+  --shadow-panel: 0 24px 64px rgba(0, 0, 0, 0.5);
+  --shadow-nav: 0 12px 40px rgba(0, 0, 0, 0.45);
+
+  /* ---- Radii ---- */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 999px;
+
+  /* ---- Spacing scale (4px base) ---- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 2rem;
+  --space-8: 2.5rem;
+  --space-10: 3rem;
+  --space-12: 4rem;
+  --space-16: 6rem;
+
+  /* ---- Typography ---- */
+  --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+
+  --fs-display: clamp(2.75rem, 6.8vw, 5rem);
+  --fs-h1: clamp(2.125rem, 5vw, 3.5rem);
+  --fs-h2: clamp(1.875rem, 3.8vw, 2.9rem);
+  --fs-h3: clamp(1.25rem, 2vw, 1.5rem);
+  --fs-body: clamp(1rem, 1vw, 1.0625rem);
+  --fs-sm: 0.9375rem;
+  --fs-mono: 0.8125rem;
+
+  --tracking-tight: -0.02em;
+  --tracking-wide: 0.02em;
+  --tracking-label: 0.26em;
+
+  /* ---- Layout ---- */
+  --container-max: 1200px;
+  --container-pad: clamp(1.25rem, 4vw, 2.5rem);
+  --nav-height: 76px;
+
+  /* ---- Z-index layers ---- */
+  --z-background: 0;
+  --z-content: 10;
+  --z-nav: 100;
+  --z-overlay: 200;
+
+  /* ---- Motion ---- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 180ms;
+  --dur-base: 320ms;
+  --dur-slow: 650ms;
+
+  /*
+    Breakpoints (reference — CSS vars cannot be used in media queries):
+    sm: 640px | md: 768px | nav-collapse: 900px | lg: 1024px | xl: 1280px
+  */
+}
+
+@media (max-width: 640px) {
+  :root {
+    --nav-height: 64px;
+  }
+}

@@ -1,0 +1,545 @@
+/* =========================================================
+   JOURNEY — Education & timeline section (#journey)
+   ========================================================= */
+
+.journey {
+  position: relative;
+  background-image: radial-gradient(
+    55% 35% at 50% 0%,
+    rgba(139, 92, 246, 0.08),
+    transparent 70%
+  );
+}
+
+/* Slow-drifting background grid (parallax via --sp) */
+.gridLayer {
+  position: absolute;
+  inset: -90px;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(
+    ellipse 75% 65% at 50% 45%,
+    black 25%,
+    transparent 78%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 75% 65% at 50% 45%,
+    black 25%,
+    transparent 78%
+  );
+  animation: journeyGridDrift 40s linear infinite;
+  will-change: transform;
+  pointer-events: none;
+}
+
+@keyframes journeyGridDrift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-72px, -72px, 0);
+  }
+}
+
+/* Gradient lighting (subtle scroll parallax via --sp) */
+.lighting {
+  position: absolute;
+  inset: -60px;
+  z-index: 0;
+  background:
+    radial-gradient(
+      45% 40% at 20% 25%,
+      rgba(77, 240, 255, 0.07),
+      transparent 70%
+    ),
+    radial-gradient(
+      50% 45% at 82% 70%,
+      rgba(139, 92, 246, 0.1),
+      transparent 70%
+    );
+  transform: translate3d(0, calc(var(--sp, 0) * -36px), 0);
+  pointer-events: none;
+}
+
+/* ---- Header ---- */
+.header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.heading {
+  font-size: var(--fs-h2);
+  letter-spacing: -0.03em;
+}
+
+.subtitle {
+  max-width: 52ch;
+  color: var(--text-secondary);
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  line-height: 1.7;
+}
+
+/* ---- Timeline scaffold ---- */
+.timelineWrap {
+  --line-x: 50%;
+  position: relative;
+  margin-top: clamp(3rem, 7vh, 4.5rem);
+}
+
+/* Central glowing line that draws itself with --progress */
+.line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--line-x);
+  z-index: 1;
+  width: 2px;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.11);
+  border-radius: var(--radius-full);
+}
+
+.lineFill {
+  position: absolute;
+  inset: 0;
+  transform: scaleY(var(--progress, 0));
+  transform-origin: top;
+  background: linear-gradient(
+    180deg,
+    var(--accent-cyan),
+    var(--accent-violet) 70%,
+    var(--accent-pink)
+  );
+  border-radius: inherit;
+  box-shadow:
+    0 0 12px rgba(77, 240, 255, 0.6),
+    0 0 32px rgba(139, 92, 246, 0.35);
+  transition: transform 120ms linear;
+}
+
+/* Glowing leading tip travelling with the drawn line */
+.lineTip {
+  position: absolute;
+  top: calc(var(--progress, 0) * 100%);
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow:
+    0 0 14px rgba(77, 240, 255, 0.95),
+    0 0 36px rgba(77, 240, 255, 0.55);
+  transition: top 120ms linear;
+}
+
+.timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2.25rem, 5vh, 3.5rem);
+}
+
+/* ---- Timeline items ---- */
+.item {
+  display: grid;
+  grid-template-columns: 1fr 56px 1fr;
+  align-items: center;
+  column-gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.spineCell {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: center;
+  perspective: 500px;
+  z-index: 2;
+}
+
+.itemLeft .cardCell {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.itemRight .cardCell {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.cardCell {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+
+/* ---- Glowing 3D node ---- */
+.node {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 50%;
+  background: rgba(5, 7, 14, 0.92);
+  box-shadow:
+    0 0 0 5px rgba(3, 4, 10, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transform: rotateX(14deg);
+  transition:
+    border-color 500ms var(--ease-smooth),
+    box-shadow 500ms var(--ease-smooth),
+    transform 500ms var(--ease-out-expo);
+}
+
+.nodeCore {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  transition:
+    background 500ms var(--ease-smooth),
+    box-shadow 500ms var(--ease-smooth),
+    transform 500ms var(--ease-out-expo);
+}
+
+.nodePing {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--accent-cyan);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.nodeOrbit {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(139, 92, 246, 0.55);
+  border-radius: 50%;
+  transform: rotateX(72deg);
+  opacity: 0.45;
+}
+
+/* Node activated by the drawing line */
+.item.is-active .node {
+  border-color: rgba(77, 240, 255, 0.75);
+  transform: rotateX(14deg) scale(1.06);
+  box-shadow:
+    0 0 0 5px rgba(3, 4, 10, 0.55),
+    0 0 22px rgba(77, 240, 255, 0.55),
+    inset 0 0 12px rgba(77, 240, 255, 0.2);
+}
+
+.item.is-active .nodeCore {
+  background: var(--accent-cyan);
+  transform: scale(1.15);
+  box-shadow:
+    0 0 16px rgba(77, 240, 255, 0.95),
+    0 0 40px rgba(77, 240, 255, 0.5);
+}
+
+.item.is-active .nodePing {
+  animation: nodePing 2.6s var(--ease-smooth) infinite;
+}
+
+@keyframes nodePing {
+  0% {
+    opacity: 0.75;
+    transform: scale(0.6);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+/* ---- Glass card with animated border + cursor glow ---- */
+.card {
+  position: relative;
+  padding: clamp(1.4rem, 3vw, 1.9rem);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(155deg, rgba(14, 18, 34, 0.92), rgba(7, 9, 18, 0.86))
+      padding-box,
+    linear-gradient(
+        135deg,
+        rgba(77, 240, 255, 0.55),
+        rgba(139, 92, 246, 0.4) 40%,
+        rgba(255, 255, 255, 0.1) 70%,
+        rgba(77, 240, 255, 0.35)
+      )
+      border-box;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition:
+    transform 160ms var(--ease-out-expo),
+    box-shadow var(--dur-base) var(--ease-smooth);
+}
+
+.card:hover {
+  box-shadow:
+    0 32px 72px rgba(0, 0, 0, 0.55),
+    0 0 34px rgba(77, 240, 255, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Soft cursor-following glow */
+.cardGlow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(77, 240, 255, 0.13),
+    rgba(139, 92, 246, 0.07) 45%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-smooth);
+  pointer-events: none;
+}
+
+.card:hover .cardGlow {
+  opacity: 1;
+}
+
+/* Connector diamond facing the timeline node */
+.card::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border: 1px solid rgba(77, 240, 255, 0.45);
+  background: rgba(8, 11, 20, 0.95);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.itemLeft .card::after {
+  right: -6px;
+}
+
+.itemRight .card::after {
+  left: -6px;
+}
+
+/* ---- Card content ---- */
+.year {
+  display: inline-block;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid rgba(77, 240, 255, 0.35);
+  border-radius: var(--radius-full);
+  background: rgba(77, 240, 255, 0.08);
+  color: var(--accent-cyan);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-shadow: 0 0 14px rgba(77, 240, 255, 0.5);
+  box-shadow: inset 0 0 14px rgba(77, 240, 255, 0.08);
+}
+
+.itemTitle {
+  margin-top: var(--space-4);
+  font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+.itemDesc {
+  margin-top: var(--space-3);
+  color: var(--text-secondary);
+  font-size: 0.9625rem;
+  line-height: 1.7;
+}
+
+/* Mirror left-side cards toward the timeline */
+.itemLeft .cardCell {
+  text-align: right;
+}
+
+/* ---- Futuristic 3D artifact behind the timeline ---- */
+.objectWrap {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  z-index: 0;
+  width: min(540px, 68vw);
+  aspect-ratio: 1;
+  transform: translate(-50%, calc(var(--sp, 0) * -48px));
+  pointer-events: none;
+}
+
+.objectGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 85%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 36% 38%,
+      rgba(77, 240, 255, 0.22),
+      transparent 58%
+    ),
+    radial-gradient(
+      circle at 66% 62%,
+      rgba(139, 92, 246, 0.24),
+      transparent 58%
+    );
+  filter: blur(46px);
+  transform: translate(-50%, -50%);
+  animation: journeyGlowBreath 7s var(--ease-smooth) infinite alternate;
+}
+
+@keyframes journeyGlowBreath {
+  0% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.objectCanvas {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---- Floating particles (CSS-only) ---- */
+.particles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(77, 240, 255, 0.8);
+  opacity: 0.45;
+  animation: journeyParticleFloat var(--pdur, 13s) ease-in-out infinite;
+  animation-delay: var(--pdelay, 0s);
+  will-change: transform;
+}
+
+.particleViolet {
+  background: var(--accent-violet);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.8);
+}
+
+@keyframes journeyParticleFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate3d(-10px, -24px, 0);
+    opacity: 0.6;
+  }
+}
+
+/* ---- Tablet: alternating timeline, simplified spacing ---- */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .item {
+    grid-template-columns: 1fr 44px 1fr;
+    column-gap: var(--space-4);
+  }
+
+  .node {
+    width: 38px;
+    height: 38px;
+  }
+
+  .nodeCore {
+    width: 10px;
+    height: 10px;
+  }
+
+  .nodeOrbit {
+    width: 30px;
+    height: 30px;
+  }
+
+  .card {
+    padding: clamp(1.1rem, 2.5vw, 1.4rem);
+  }
+
+  .itemTitle {
+    font-size: 1.1rem;
+  }
+}
+
+/* ---- Mobile: single column, line on the left ---- */
+@media (max-width: 767px) {
+  .timelineWrap {
+    --line-x: 20px;
+  }
+
+  .item {
+    grid-template-columns: 40px minmax(0, 1fr);
+    column-gap: var(--space-4);
+    align-items: start;
+  }
+
+  .spineCell {
+    grid-column: 1;
+    grid-row: 1;
+    padding-top: 0.4rem;
+  }
+
+  .itemLeft .cardCell,
+  .itemRight .cardCell {
+    grid-column: 2;
+    grid-row: 1;
+    text-align: left;
+  }
+
+  .node {
+    width: 36px;
+    height: 36px;
+  }
+
+  .nodeCore {
+    width: 10px;
+    height: 10px;
+  }
+
+  .nodeOrbit {
+    width: 27px;
+    height: 27px;
+  }
+
+  .itemLeft .card::after,
+  .itemRight .card::after {
+    right: auto;
+    left: -6px;
+  }
+
+  .objectWrap {
+    top: -30px;
+    width: min(320px, 78vw);
+    opacity: 0.75;
+  }
+
+  /* Reduce particles on mobile */
+  .particles {
+    display: none;
+  }
+}

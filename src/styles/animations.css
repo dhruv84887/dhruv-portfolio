@@ -1,0 +1,26 @@
+/* =========================================================
+   GLOBAL ANIMATIONS — keyframes + scroll-reveal primitives
+   (JS orchestration lives in src/animations/)
+   ========================================================= */
+
+/* ---- Scroll reveal (paired with useReveal) ---- */
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+  transition:
+    opacity var(--dur-slow) var(--ease-out-expo),
+    transform var(--dur-slow) var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}

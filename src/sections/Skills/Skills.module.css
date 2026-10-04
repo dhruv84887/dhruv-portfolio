@@ -1,0 +1,397 @@
+/* =========================================================
+   SKILLS — interactive 3D skill constellation (#skills)
+   ========================================================= */
+
+.skills {
+  position: relative;
+  background-image: radial-gradient(
+    60% 40% at 50% 0%,
+    rgba(139, 92, 246, 0.1),
+    transparent 70%
+  );
+}
+
+/* ---- Header ---- */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.title {
+  font-size: var(--fs-h2);
+  letter-spacing: -0.03em;
+}
+
+.subtitle {
+  max-width: 52ch;
+  color: var(--text-secondary);
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  line-height: 1.7;
+}
+
+/* ---- Category filter tabs ---- */
+/*
+ * The tab strip is wider than a phone. It scrolls horizontally inside
+ * .tabsWrap, so the wrapper must be allowed to shrink: without
+ * max-width + min-width it shrink-wraps to the full tab row (~650px)
+ * and pushes the whole page into horizontal scroll.
+ */
+.tabsWrap {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin-top: var(--space-4);
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
+  min-width: 0;
+  gap: var(--space-1);
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: var(--tracking-wide);
+  white-space: nowrap;
+  transition:
+    color var(--dur-fast) var(--ease-smooth),
+    background var(--dur-base) var(--ease-smooth),
+    border-color var(--dur-base) var(--ease-smooth),
+    box-shadow var(--dur-base) var(--ease-smooth);
+}
+
+.tab:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tab[aria-pressed='true'] {
+  color: var(--accent-cyan);
+  background: rgba(77, 240, 255, 0.1);
+  border-color: rgba(77, 240, 255, 0.4);
+  box-shadow:
+    0 0 18px rgba(77, 240, 255, 0.18),
+    inset 0 0 14px rgba(77, 240, 255, 0.07);
+  text-shadow: 0 0 12px rgba(77, 240, 255, 0.5);
+}
+
+.tabCount {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  transition: color var(--dur-fast) var(--ease-smooth);
+}
+
+.tab[aria-pressed='true'] .tabCount {
+  color: var(--accent-cyan);
+}
+
+/* ---- Stage (3D + constellation) ---- */
+.stage {
+  position: relative;
+  height: 430px;
+  margin-top: clamp(2.5rem, 6vh, 4rem);
+}
+
+/* Glowing data-flow connections: core → chips */
+.connections {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.connection {
+  stroke: rgba(77, 240, 255, 0.5);
+  stroke-width: 1;
+  stroke-dasharray: 5 8;
+  stroke-linecap: round;
+  /* Opacity pulse (composited) instead of a stroke-dashoffset
+     animation (which repainted the SVG every frame) */
+  animation: connectionPulse 3s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * -0.6s);
+}
+
+@keyframes connectionPulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* 3D core visual (glow + canvas) */
+.coreVisual {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.stageGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 58%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 35% 38%,
+      rgba(77, 240, 255, 0.28),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 66% 60%,
+      rgba(139, 92, 246, 0.3),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(255, 94, 168, 0.1),
+      transparent 62%
+    );
+  filter: blur(44px);
+  transform: translate(-50%, -50%);
+  animation: skillsGlow 7s ease-in-out infinite alternate;
+}
+
+/* Opacity-only pulse: never re-rasterize the blurred layer */
+@keyframes skillsGlow {
+  0% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.canvasWrap {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---- Floating skill chips ---- */
+.orbit {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
+.orbitItem {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform:
+    translate(-50%, -50%)
+    translate3d(
+      calc(var(--px, 0) * var(--depth, 8px)),
+      calc(var(--py, 0) * var(--depth, 8px)),
+      0
+    );
+}
+
+.chip {
+  animation: chipFloat calc(5.5s + var(--i, 0) * 0.6s) var(--ease-smooth)
+    infinite;
+  animation-delay: calc(var(--i, 0) * -1.2s);
+}
+
+@keyframes chipFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+.card {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.7rem 1.05rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(
+      150deg,
+      rgba(255, 255, 255, 0.07),
+      rgba(255, 255, 255, 0.02)
+    ),
+    rgba(8, 11, 22, 0.8);
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: var(--tracking-wide);
+  white-space: nowrap;
+  will-change: transform;
+  transition:
+    transform 160ms var(--ease-out-expo),
+    border-color var(--dur-base) var(--ease-smooth),
+    box-shadow var(--dur-base) var(--ease-smooth);
+}
+
+/* Pointer-tracked spotlight sheen */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    150px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(77, 240, 255, 0.16),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-smooth);
+  pointer-events: none;
+}
+
+.card:hover {
+  border-color: rgba(77, 240, 255, 0.45);
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.5),
+    0 0 26px rgba(77, 240, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.chipMark {
+  position: relative;
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--gradient-accent);
+  box-shadow: 0 0 12px rgba(77, 240, 255, 0.75);
+  transform: rotate(45deg);
+}
+
+.chipLabel {
+  position: relative;
+}
+
+/* ---- Desktop: immersive constellation ---- */
+@media (min-width: 1024px) {
+  .stage {
+    height: clamp(460px, 52vh, 540px);
+  }
+}
+
+/* ---- Tablet: simplified 3D layout ---- */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .card {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* ---- Mobile: clean interactive grid ---- */
+@media (max-width: 640px) {
+  .tabs {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    max-width: 100%;
+    overflow-x: auto;
+    border-radius: var(--radius-md);
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .stage {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    height: auto;
+  }
+
+  .connections {
+    display: none;
+  }
+
+  .coreVisual {
+    position: relative;
+    inset: auto;
+    height: 230px;
+  }
+
+  .stageGlow {
+    width: 90%;
+    animation-duration: 26s;
+  }
+
+  .orbit {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--space-3);
+  }
+
+  .orbitItem {
+    position: static;
+    display: flex;
+    transform: none;
+  }
+
+  .chipWrap,
+  .chip {
+    flex: 1;
+    display: flex;
+  }
+
+  .chip {
+    animation-name: chipFloatSmall;
+  }
+
+  .card {
+    flex: 1;
+    justify-content: center;
+    white-space: normal;
+    padding: 0.75rem 0.95rem;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+}
+
+@keyframes chipFloatSmall {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}

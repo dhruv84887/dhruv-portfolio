@@ -1,0 +1,745 @@
+/* =========================================================
+   PROJECTS — cinematic 3D project showcase (#work)
+   ========================================================= */
+
+.projects {
+  position: relative;
+  overflow: hidden;
+  background-image: radial-gradient(
+    55% 35% at 50% 0%,
+    rgba(77, 240, 255, 0.07),
+    transparent 70%
+  );
+}
+
+/* Gradient lighting */
+.lighting {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(
+      45% 40% at 82% 18%,
+      rgba(139, 92, 246, 0.09),
+      transparent 70%
+    ),
+    radial-gradient(
+      40% 35% at 12% 70%,
+      rgba(77, 240, 255, 0.07),
+      transparent 70%
+    );
+  pointer-events: none;
+}
+
+/* Subtle floating particles (CSS-only for performance) */
+.particles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(77, 240, 255, 0.8);
+  opacity: 0.45;
+  animation: particleFloat var(--pdur, 12s) ease-in-out infinite;
+  animation-delay: var(--pdelay, 0s);
+  will-change: transform;
+}
+
+.particleViolet {
+  background: var(--accent-violet);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.8);
+}
+
+@keyframes particleFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate3d(10px, -22px, 0);
+    opacity: 0.65;
+  }
+}
+
+/* ---- Header ---- */
+.header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.heading {
+  font-size: var(--fs-h2);
+  letter-spacing: -0.03em;
+}
+
+.subtitle {
+  max-width: 52ch;
+  color: var(--text-secondary);
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  line-height: 1.7;
+}
+
+/* ---- Staggered / masonry-style grid ---- */
+.grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: start;
+  gap: clamp(1.5rem, 3vw, 2rem);
+  margin-top: clamp(2.5rem, 6vh, 4rem);
+}
+
+.item {
+  min-width: 0;
+}
+
+/* ---- Premium project card ---- */
+.card {
+  height: 100%;
+  border-radius: var(--radius-lg);
+  transition:
+    transform var(--dur-base) var(--ease-out-expo),
+    box-shadow var(--dur-base) var(--ease-smooth);
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow:
+    0 36px 80px rgba(0, 0, 0, 0.55),
+    0 0 36px rgba(77, 240, 255, 0.1);
+}
+
+.cardInner {
+  position: relative;
+  height: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.055),
+      rgba(255, 255, 255, 0.015) 45%,
+      rgba(255, 255, 255, 0.04)
+    ),
+    rgba(6, 9, 18, 0.8);
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition:
+    transform 160ms var(--ease-out-expo),
+    border-color var(--dur-base) var(--ease-smooth),
+    box-shadow var(--dur-base) var(--ease-smooth);
+}
+
+.card:hover .cardInner {
+  border-color: rgba(77, 240, 255, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 34px rgba(77, 240, 255, 0.14);
+}
+
+/* Cursor-following background glow */
+.cardGlow {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: radial-gradient(
+    320px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(77, 240, 255, 0.13),
+    rgba(139, 92, 246, 0.07) 45%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-smooth);
+  pointer-events: none;
+}
+
+.cardInner:hover .cardGlow {
+  opacity: 1;
+}
+
+/* ---- Visual preview ---- */
+.visual {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Image moves independently of the card tilt (depth) */
+.visualInner {
+  position: absolute;
+  inset: -7%;
+  transform: translate3d(
+    calc(var(--tx, 0) * -16px),
+    calc(var(--ty, 0) * -12px),
+    0
+  )
+    scale(var(--vscale, 1));
+  transition: transform 400ms var(--ease-out-expo);
+  will-change: transform;
+}
+
+.visual:hover .visualInner {
+  --vscale: 1.07;
+}
+
+/* Cinematic overlay on hover */
+.visualOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(3, 4, 10, 0) 30%,
+    rgba(3, 4, 10, 0.55) 70%,
+    rgba(3, 4, 10, 0.85) 100%
+  );
+  opacity: 0.4;
+  transition: opacity var(--dur-base) var(--ease-smooth);
+  pointer-events: none;
+}
+
+.visual:hover .visualOverlay {
+  opacity: 1;
+}
+
+.visualIndex {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 50%;
+  background: rgba(4, 6, 13, 0.8);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.05em;
+  transition:
+    transform var(--dur-base) var(--ease-out-expo),
+    border-color var(--dur-base) var(--ease-smooth),
+    box-shadow var(--dur-base) var(--ease-smooth);
+}
+
+.card:hover .visualIndex {
+  transform: translateY(-2px);
+  border-color: rgba(77, 240, 255, 0.5);
+  box-shadow: 0 0 18px rgba(77, 240, 255, 0.3);
+}
+
+/* "View Project" revealed on visual hover (desktop) */
+.quickView {
+  position: absolute;
+  left: 50%;
+  bottom: 1.1rem;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1.35rem;
+  border: 1px solid rgba(77, 240, 255, 0.5);
+  border-radius: var(--radius-full);
+  background: rgba(4, 8, 16, 0.9);
+  color: var(--accent-cyan);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: var(--tracking-wide);
+  box-shadow: 0 0 22px rgba(77, 240, 255, 0.3);
+  opacity: 0;
+  transform: translate(-50%, 16px);
+  pointer-events: none;
+  transition:
+    opacity var(--dur-base) var(--ease-out-expo),
+    transform var(--dur-base) var(--ease-out-expo),
+    box-shadow var(--dur-base) var(--ease-smooth),
+    background var(--dur-base) var(--ease-smooth);
+}
+
+.visual:hover .quickView {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+
+.quickView:hover {
+  background: rgba(77, 240, 255, 0.16);
+  box-shadow: 0 0 32px rgba(77, 240, 255, 0.5);
+}
+
+.quickView:hover .btn-arrow {
+  transform: translateX(5px);
+}
+
+/* ---- Card content ---- */
+.body {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: clamp(1.4rem, 3vw, 1.9rem);
+}
+
+.category {
+  color: var(--accent-cyan);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-shadow: 0 0 14px rgba(77, 240, 255, 0.45);
+}
+
+.cardTitle {
+  font-size: clamp(1.2rem, 1.6vw, 1.45rem);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+.desc {
+  color: var(--text-secondary);
+  font-size: 0.9625rem;
+  line-height: 1.7;
+}
+
+/* ---- Technology badges (animate subtly on hover) ---- */
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.badge {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition:
+    transform var(--dur-base) var(--ease-out-expo),
+    border-color var(--dur-base) var(--ease-smooth),
+    color var(--dur-base) var(--ease-smooth),
+    box-shadow var(--dur-base) var(--ease-smooth);
+  transition-delay: calc(var(--b, 0) * 45ms);
+}
+
+.cardInner:hover .badge {
+  transform: translateY(-3px);
+  border-color: rgba(77, 240, 255, 0.4);
+  color: var(--text-primary);
+  box-shadow: 0 0 14px rgba(77, 240, 255, 0.16);
+}
+
+/* ---- Actions ---- */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-1);
+}
+
+.actions > :global(.btn) {
+  flex: 1 1 auto;
+  min-height: 46px;
+}
+
+/* ---- Generated preview art (no image assets) ---- */
+.art {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background-color: #05070f;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Real cover image (projects[].image) fills the preview frame. */
+.artImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.artAi::before,
+.artSocial::before,
+.artCreative::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.artAi::before {
+  background:
+    radial-gradient(
+      60% 70% at 70% 20%,
+      rgba(77, 240, 255, 0.2),
+      transparent 65%
+    ),
+    radial-gradient(
+      55% 65% at 20% 85%,
+      rgba(139, 92, 246, 0.2),
+      transparent 65%
+    ),
+    linear-gradient(160deg, #081018 0%, #04050c 100%);
+}
+
+.artSocial::before {
+  background:
+    radial-gradient(
+      60% 70% at 25% 25%,
+      rgba(139, 92, 246, 0.24),
+      transparent 65%
+    ),
+    radial-gradient(
+      55% 65% at 80% 80%,
+      rgba(255, 94, 168, 0.18),
+      transparent 65%
+    ),
+    linear-gradient(160deg, #0a0816 0%, #04050c 100%);
+}
+
+.artCreative::before {
+  background:
+    radial-gradient(
+      60% 70% at 75% 75%,
+      rgba(77, 240, 255, 0.2),
+      transparent 65%
+    ),
+    radial-gradient(
+      55% 65% at 20% 20%,
+      rgba(139, 92, 246, 0.22),
+      transparent 65%
+    ),
+    linear-gradient(160deg, #070b18 0%, #04050c 100%);
+}
+
+/* Scanning sweep for the AI visual */
+.artAi::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 34%;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(77, 240, 255, 0.14),
+    transparent
+  );
+  animation: scanSweep 4.5s linear infinite;
+}
+
+@keyframes scanSweep {
+  from {
+    transform: translateY(-110%);
+  }
+  to {
+    transform: translateY(320%);
+  }
+}
+
+.artSvg {
+  position: relative;
+  z-index: 1;
+  width: 88%;
+  max-width: 520px;
+  color: var(--accent-cyan);
+  filter: drop-shadow(0 0 14px rgba(77, 240, 255, 0.3));
+  animation: artDrift 9s var(--ease-smooth) infinite;
+}
+
+@keyframes artDrift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* ---- Project preview modal ---- */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vh, 2.5rem) clamp(1rem, 4vw, 2rem);
+}
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 3, 8, 0.72);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-smooth);
+  pointer-events: none;
+}
+
+.modalOpen .modalBackdrop {
+  opacity: 1;
+}
+
+.modalPanel {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 880px);
+  max-height: calc(100svh - 2rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.06),
+      rgba(255, 255, 255, 0.02) 45%,
+      rgba(255, 255, 255, 0.04)
+    ),
+    rgba(6, 9, 18, 0.92);
+  backdrop-filter: blur(24px) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(24px) saturate(var(--glass-saturate));
+  box-shadow:
+    0 48px 120px rgba(0, 0, 0, 0.65),
+    0 0 60px rgba(77, 240, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transform: translateY(28px) scale(0.97);
+  transition:
+    opacity 380ms var(--ease-out-expo),
+    transform 380ms var(--ease-out-expo);
+  will-change: transform, opacity;
+}
+
+.modalOpen .modalPanel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.modalHeader {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 1.05rem clamp(1.25rem, 3vw, 1.9rem);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(180deg, rgba(6, 9, 18, 0.96), rgba(6, 9, 18, 0.72));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.modalEyebrow {
+  color: var(--accent-cyan);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.modalClose {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  transition:
+    transform var(--dur-base) var(--ease-out-expo),
+    border-color var(--dur-base) var(--ease-smooth),
+    box-shadow var(--dur-base) var(--ease-smooth);
+}
+
+.modalClose:hover {
+  transform: rotate(90deg);
+  border-color: rgba(77, 240, 255, 0.5);
+  box-shadow: 0 0 20px rgba(77, 240, 255, 0.35);
+}
+
+.modalHero {
+  position: relative;
+  aspect-ratio: 16 / 8;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: clamp(1.4rem, 3.5vw, 2.2rem);
+}
+
+.modalTitle {
+  font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.modalDesc {
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+.modalLabel {
+  margin-top: var(--space-2);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.shots {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.shot {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shotPlaceholder {
+  display: grid;
+  place-items: center;
+  border-style: dashed;
+  border-color: rgba(77, 240, 255, 0.3);
+  text-align: center;
+}
+
+.shotPlaceholder span {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.7;
+}
+
+.shotPlaceholder code {
+  color: var(--accent-cyan);
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.modalActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  padding-top: var(--space-5);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.modalActions > :global(.btn) {
+  flex: 1 1 auto;
+  min-height: 48px;
+}
+
+/* ---- Desktop: staggered / masonry-style layout ---- */
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .item:nth-child(even) {
+    margin-top: 72px;
+  }
+
+  .item:nth-child(even) .visual {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* ---- Tablet: 2-column ---- */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ---- Mobile: single column, touch-friendly ---- */
+@media (max-width: 640px) {
+  .particles {
+    display: none;
+  }
+
+  /* Persistent touch affordance instead of hover reveal */
+  .quickView {
+    opacity: 1;
+    transform: translate(-50%, 0);
+    pointer-events: auto;
+  }
+
+  .actions > :global(.btn) {
+    flex: 1 1 140px;
+  }
+
+  .shots {
+    grid-template-columns: 1fr;
+  }
+
+  .modalHero {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+/* ---- Mobile: lighter blur for performance ---- */
+@media (max-width: 639px) {
+  .modalBackdrop {
+    backdrop-filter: blur(10px) saturate(110%);
+    -webkit-backdrop-filter: blur(10px) saturate(110%);
+  }
+
+  .modalPanel {
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+  }
+}

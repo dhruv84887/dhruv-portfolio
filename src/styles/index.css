@@ -1,0 +1,5 @@
+/* Global stylesheet entry — import order matters. */
+@import './tokens.css';
+@import './base.css';
+@import './animations.css';
+@import './utilities.css';

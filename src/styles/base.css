@@ -1,0 +1,163 @@
+/* =========================================================
+   BASE — reset + element defaults
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  scrollbar-color: rgba(139, 92, 246, 0.6) var(--bg-void);
+  scrollbar-width: thin;
+}
+
+body {
+  min-height: 100svh;
+  overflow-x: hidden;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Deep-space backdrop */
+  background-color: var(--bg-void);
+  background-image:
+    radial-gradient(
+      1200px 800px at 78% -10%,
+      rgba(139, 92, 246, 0.16),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 700px at 8% 18%,
+      rgba(77, 240, 255, 0.1),
+      transparent 55%
+    ),
+    linear-gradient(180deg, #05060d 0%, #04050a 45%, #020308 100%);
+  background-attachment: fixed;
+}
+
+/* Prevent anchor jumps from hiding content behind the fixed navbar */
+section[id],
+[id='main-content'] {
+  scroll-margin-top: calc(var(--nav-height) + 1.25rem);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-primary);
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+::selection {
+  background: rgba(77, 240, 255, 0.3);
+  color: #f4fbff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---- Scrollbar (WebKit) ---- */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-void);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(77, 240, 255, 0.55),
+    rgba(139, 92, 246, 0.55)
+  );
+  border: 2px solid var(--bg-void);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(77, 240, 255, 0.8),
+    rgba(139, 92, 246, 0.8)
+  );
+}
+
+/* ---- Reduced motion: respect user preferences globally ---- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Body scroll lock while the mobile menu is open */
+body.menu-open {
+  overflow: hidden;
+}
